@@ -1,0 +1,40 @@
+---
+title: "Data viz worst"
+author: "Grace Lewin"
+date: "8/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(tidyverse)
+library(treemap)
+library(d3Tree)
+library(paletteer)
+```
+
+```{r}
+space <- read_csv(here("data", "space_launches.csv"))
+```
+
+```{r}
+treemap(space,
+            index=c("type","mission"),
+            vSize="launch_year",
+            type="index",
+            palette = paletteer_d("ggprism::prism_light2"),
+            bg.labels=c("white"),
+            align.labels=list(
+              c("center", "center"), 
+              c("right", "bottom")),
+        title = "Space is Super Cool!",
+        fontcolor.labels = c("Magenta", "Orange"),
+        border.col = c("pink"),
+        border.lwds = c(1),
+        fontfamily.title = "serif"
+          ) 
+
+ggsave(here("R", "worst_graph_ever.jpg"), plot = last_plot())
+```
+

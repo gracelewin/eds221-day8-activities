@@ -1,0 +1,71 @@
+---
+title: "Data viz best"
+author: "Grace Lewin"
+date: "8/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(paletteer)
+library(directlabels)
+library(grid)
+library(ggplot2)
+```
+
+```{r}
+sfdata <- read_csv(here("data", "San_Francisco_Communitywide_Greenhouse_Gas_Inventory.csv"))
+
+sf_greenhouse1 <- sfdata %>% 
+  group_by(Sector_General) %>% 
+  summarise(sum(Emissions_mtCO2e)) %>% 
+  na.omit()
+  
+  
+
+sf_greenhouse2 <- sfdata %>% 
+  group_by(Calendar_Year, Commodity_Type) %>% 
+  summarise(sum(Emissions_mtCO2e))
+
+sfdata_subset <- sfdata %>% 
+  filter(Calendar_Year >= 2005) %>% 
+  filter(str_detect(Sector_Detail2, pattern = "PG&E")) %>% 
+  select(Calendar_Year, Sector_Detail2, Emissions_mtCO2e)
+```
+
+Make an actually good plot!!
+
+```{r}
+graph_data <- sfdata %>% 
+  group_by(Sector_Detail1, Calendar_Year) %>% 
+  summarise(total_emissions = sum(Emissions_mtCO2e)/1000) %>% 
+  na.omit() %>% 
+  filter(Sector_Detail1 %in% c("Cars & Trucks", "Residential", "Commercial & Industrial"))
+  
+
+  
+
+
+ggplot(graph_data, aes(x = Calendar_Year, y = total_emissions)) +
+  geom_line(aes(color = Sector_Detail1)) +
+  labs(x = "Year", 
+       y = "Total Emissions (kilo-tons)", 
+       title = "Emissions by Sector",
+       subtitle = "Top 3 Polluting Sectors",
+       color = "Sector") +
+  theme_light()
+  
+  
+  
+
+  
+  #geom_text(data = filter(graph_data, Calendar_Year == max(Calendar_Year)), aes(label = Sector_Detail1, color = Sector_Detail1), show.legend = FALSE)
+
+
+
+
+```
+
+
