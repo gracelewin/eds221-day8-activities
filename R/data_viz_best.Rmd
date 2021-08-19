@@ -48,7 +48,7 @@ graph_data <- sfdata %>%
   
 
 
-plot <- ggplot(graph_data, aes(x = Calendar_Year, y = total_emissions)) +
+good_plot <- ggplot(graph_data, aes(x = Calendar_Year, y = total_emissions)) +
   geom_line(aes(color = Sector_Detail1)) +
   labs(x = "Year", 
        y = "Total Emissions (kilo-tons)", 
@@ -56,6 +56,8 @@ plot <- ggplot(graph_data, aes(x = Calendar_Year, y = total_emissions)) +
        subtitle = "Top 3 Polluting Sectors",
        color = "Sector") +
   theme_light()
+
+good_plot
 
 ggsave(here("figs", "emissons_by_sector.jpg"), height = 6, width = 10)
   
